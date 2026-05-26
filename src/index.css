@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* SMOOTH SCROLL */
+html {
+  scroll-behavior: smooth;
+}
+
+/* BODY */
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: white;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* REMOVE BLUE HIGHLIGHT */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+/* CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0b0b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4a373;
+  border-radius: 999px;
+}
+
+/* SELECTION COLOR */
+::selection {
+  background: #d4a373;
+  color: black;
+}
+
+/* IMAGE OPTIMIZATION */
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* BUTTON SMOOTHNESS */
+button {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* LINK RESET */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* HERO TEXT GLOW */
+.hero-glow {
+  text-shadow:
+    0 0 20px rgba(212, 163, 115, 0.4),
+    0 0 40px rgba(212, 163, 115, 0.2);
+}
+
+/* GLASS EFFECT */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* GOLD BORDER */
+.gold-border {
+  border: 1px solid rgba(212, 163, 115, 0.4);
+}
+
+/* CINEMATIC OVERLAY */
+.cinematic-overlay {
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85),
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.85)
+    );
+}
+
+/* SECTION SPACING */
+.section-padding {
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+/* LUXURY BUTTON */
+.luxury-btn {
+  padding: 16px 32px;
+  border-radius: 999px;
+  font-weight: 500;
+  transition: all 0.4s ease;
+}
+
+.luxury-btn:hover {
+  transform: translateY(-3px);
+}
+
+/* GOLD BUTTON */
+.gold-btn {
+  background: #d4a373;
+  color: black;
+}
+
+.gold-btn:hover {
+  background: #e6b98d;
+  box-shadow: 0 10px 30px rgba(212, 163, 115, 0.3);
+}
+
+/* OUTLINE BUTTON */
+.outline-btn {
+  border: 1px solid white;
+}
+
+.outline-btn:hover {
+  background: white;
+  color: black;
+}
+
+/* CARD HOVER EFFECT */
+.card-hover {
+  transition:
+    transform 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(212, 163, 115, 0.15);
+}
+
+/* IMAGE HOVER ZOOM */
+.image-zoom {
+  overflow: hidden;
+}
+
+.image-zoom img {
+  transition: transform 0.8s ease;
+}
+
+.image-zoom:hover img {
+  transform: scale(1.08);
+}
+
+/* FADE ANIMATION */
+.fade-up {
+  animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* FLOATING ANIMATION */
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* GRAIN EFFECT */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+
+  h1 {
+    line-height: 1.1;
+  }
+
+  section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+}
