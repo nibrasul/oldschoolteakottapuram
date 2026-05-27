@@ -355,15 +355,6 @@ function Home() {
             </form>
           </div>
         </div>
-        <div className="mt-20 text-center">
-          <div className="w-px h-16 bg-gray-800 mx-auto mb-8"></div>
-          <h3 className="text-2xl font-semibold mb-3">Join The Old School Club</h3>
-          <p className="text-gray-400 mb-6">Get exclusive offers and tea stories straight to your inbox.</p>
-          <form onSubmit={handleSubscribe} className="flex max-w-md mx-auto gap-3">
-            <input type="email" placeholder="Your email" value={subscribeEmail} onChange={(e) => setSubscribeEmail(e.target.value)} className="flex-1 p-3 bg-[#111] border border-gray-800 rounded-lg focus:outline-none focus:border-[#D4A373]" required />
-            <button type="submit" className="px-6 py-3 bg-[#D4A373] text-black rounded-lg font-semibold hover:bg-[#c49264] transition">Subscribe</button>
-          </form>
-        </div>
       </section>
 
       <footer className="py-16 border-t border-white/10 bg-[#0a0a0a]">
@@ -380,30 +371,202 @@ function Home() {
   )
 }
 
-/* ================= MENU PAGE ================= */
+/* ================= MENU PAGE WITH BLURRY BG & FULLSCREEN VIDEO ================= */
 function Menu() {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState("all")
   const [selectedItem, setSelectedItem] = useState(null)
+  const [scrollOpacity, setScrollOpacity] = useState(0)
+
+  useEffect(() => {
+    AOS.init({ duration: 1200, once: false })
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      const maxScroll = window.innerHeight
+      const opacity = Math.min(scrollPosition / maxScroll, 0.95)
+      setScrollOpacity(opacity)
+    }
+    
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const categories = ["all", "black tea", "masala chai", "herbal", "desserts", "specials"]
+  
   const menuItems = [
-    { name: "Assam Black Tea", price: "₹69", category: "black tea", desc: "Malty and bold with rich aroma", origin: "Assam", img: "https://images.unsplash.com/photo-1597481499750-3e6b8c110e7f", fullDesc: "A robust and full-bodied black tea from the Brahmaputra Valley." },
-    { name: "Darjeeling First Flush", price: "₹89", category: "black tea", desc: "Muscatel notes, light and floral", origin: "Darjeeling", img: "https://images.unsplash.com/photo-1597481499750-3e6b8c110e7f", fullDesc: "The champagne of teas! Delicate floral notes." },
-    { name: "Kadak Masala Chai", price: "₹79", category: "masala chai", desc: "Strong spice blend with ginger", origin: "Kerala", img: "https://images.unsplash.com/photo-1576092768241-ec7dfd6f98bb", fullDesc: "Powerful blend of Assam tea with cardamom, cloves, cinnamon." },
-    { name: "Tulsi Green Tea", price: "₹99", category: "herbal", desc: "Immunity booster with holy basil", origin: "Himalayan", img: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5", fullDesc: "Pure green tea with sacred Tulsi." },
-    { name: "Chocolate Brownie", price: "₹149", category: "desserts", desc: "Gooey & warm with walnut topping", origin: "In-house", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c", fullDesc: "Double chocolate brownie with walnuts." },
-    { name: "Classic Sulaimani", price: "₹59", category: "black tea", desc: "Kerala specialty with lemon", origin: "Kodungallur", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c", fullDesc: "Our signature black tea with fresh lemon." }
+    { name: "Assam Black Tea", price: "₹69", category: "black tea", desc: "Malty and bold with rich aroma", origin: "Assam", img: "https://images.unsplash.com/photo-1597481499750-3e6b8c110e7f", fullDesc: "A robust and full-bodied black tea from the Brahmaputra Valley. Known for its bright color and strong malty flavor, this is the perfect morning cup." },
+    { name: "Darjeeling First Flush", price: "₹89", category: "black tea", desc: "Muscatel notes, light and floral", origin: "Darjeeling", img: "https://images.unsplash.com/photo-1597481499750-3e6b8c110e7f", fullDesc: "The champagne of teas! Delicate floral notes with a light golden color. This first flush harvest captures the essence of spring in the Himalayas." },
+    { name: "Kadak Masala Chai", price: "₹79", category: "masala chai", desc: "Strong spice blend with ginger", origin: "Kerala", img: "https://images.unsplash.com/photo-1576092768241-ec7dfd6f98bb", fullDesc: "Powerful blend of Assam tea with cardamom, cloves, cinnamon, and fresh ginger. A true Kerala favorite that warms the soul." },
+    { name: "Tulsi Green Tea", price: "₹99", category: "herbal", desc: "Immunity booster with holy basil", origin: "Himalayan", img: "https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5", fullDesc: "Pure green tea with sacred Tulsi (holy basil). Known for its healing properties and calming effect on the mind and body." },
+    { name: "Chocolate Brownie", price: "₹149", category: "desserts", desc: "Gooey & warm with walnut topping", origin: "In-house", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c", fullDesc: "Double chocolate brownie with crunchy walnuts. Served warm with a dusting of powdered sugar." },
+    { name: "Classic Sulaimani", price: "₹59", category: "black tea", desc: "Kerala specialty with lemon", origin: "Kodungallur", img: "https://images.unsplash.com/photo-1517701604599-bb29b565090c", fullDesc: "Our signature black tea with fresh lemon juice and a hint of cardamom. A 100-year-old recipe from the Malabar coast." },
+    { name: "Butter Puff", price: "₹89", category: "desserts", desc: "Flaky puff pastry with buttery layers", origin: "In-house", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a", fullDesc: "Perfectly layered butter puff pastry, baked fresh every morning. A classic tea-time companion." },
+    { name: "Peppermint Tea", price: "₹79", category: "herbal", desc: "Fresh mint leaves steeped to perfection", origin: "Himalayan", img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085", fullDesc: "Refreshing peppermint tea made from fresh Himalayan mint leaves. Great for digestion and relaxation." },
+    { name: "Kashmiri Kahwa", price: "₹129", category: "specials", desc: "Saffron & almond infused green tea", origin: "Kashmir", img: "https://images.unsplash.com/photo-1598866594230-a7c12756260f", fullDesc: "Traditional Kashmiri green tea with saffron strands, almonds, and whole spices. Served sweetened with honey." }
   ]
 
   const filtered = activeCategory === "all" ? menuItems : menuItems.filter(i => i.category === activeCategory)
 
   return (
     <div className="bg-black text-white min-h-screen">
-      {selectedItem && (<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4" onClick={() => setSelectedItem(null)}><div className="bg-[#111] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#D4A373]/30" onClick={(e) => e.stopPropagation()}><img src={selectedItem.img} alt={selectedItem.name} className="w-full h-64 object-cover rounded-t-2xl" /><div className="p-6"><div className="flex justify-between items-start mb-4"><div><h3 className="text-2xl font-bold text-[#D4A373]">{selectedItem.name}</h3><p className="text-gray-400 text-sm mt-1">{selectedItem.origin}</p></div><span className="text-3xl font-bold text-[#D4A373]">{selectedItem.price}</span></div><p className="text-gray-300 leading-relaxed mb-4">{selectedItem.fullDesc}</p><p className="text-gray-400 text-sm mb-6">{selectedItem.desc}</p><button onClick={() => setSelectedItem(null)} className="w-full px-6 py-2 bg-[#D4A373] text-black rounded-lg font-semibold">Close</button></div></div></div>)}
-      <div className="sticky top-0 z-50 bg-black/95 backdrop-blur-md p-4 flex justify-between items-center px-6 md:px-20 border-b border-gray-800"><button onClick={() => navigate("/")} className="border border-[#D4A373] px-4 py-2 text-[#D4A373] hover:bg-[#D4A373] hover:text-black transition rounded-lg text-sm">← HOME</button><h1 className="text-2xl font-bold tracking-wide"><span className="text-[#D4A373]">MENU</span></h1><div className="w-20"></div></div>
-      <div className="relative h-[40vh] flex items-center justify-center text-center bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=2942&auto=format')" }}><div className="absolute inset-0 bg-black/60"></div><div className="relative z-10"><h1 className="text-4xl md:text-6xl font-bold mb-4">Our <span className="text-[#D4A373]">Collection</span></h1><p className="text-gray-300 max-w-2xl mx-auto px-4">Carefully curated teas and treats from around the world</p></div></div>
-      <div className="px-6 md:px-20 py-8"><div className="flex flex-wrap justify-center gap-3 mb-12">{categories.map(cat => (<button key={cat} onClick={() => setActiveCategory(cat)} className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat ? "bg-[#D4A373] text-black" : "border border-gray-700 hover:border-[#D4A373] hover:text-[#D4A373]"}`}>{cat.toUpperCase()}</button>))}</div><div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">{filtered.map((item, idx) => (<div key={idx} onClick={() => setSelectedItem(item)} className="group bg-[#111] rounded-2xl overflow-hidden border border-gray-800 hover:border-[#D4A373] transition-all duration-300 cursor-pointer hover:transform hover:-translate-y-2"><div className="relative h-56 overflow-hidden"><img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" /><div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div><div className="absolute top-4 right-4"><span className="px-3 py-1 bg-[#D4A373]/90 text-black text-xs rounded-full font-semibold">{item.category.toUpperCase()}</span></div></div><div className="p-5"><div className="flex justify-between items-start mb-2"><h3 className="text-xl font-bold group-hover:text-[#D4A373] transition">{item.name}</h3><span className="text-[#D4A373] font-bold text-lg">{item.price}</span></div><p className="text-gray-400 text-sm mb-2">{item.desc}</p><p className="text-gray-500 text-xs flex items-center gap-1"><span className="inline-block w-1 h-1 rounded-full bg-[#D4A373]"></span>{item.origin}</p><button className="mt-4 w-full py-2 border border-gray-700 rounded-lg text-sm hover:bg-[#D4A373] hover:text-black hover:border-[#D4A373] transition">View Details</button></div></div>))}</div></div>
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-50 bg-black/95 backdrop-blur-md p-4 flex justify-between items-center px-6 md:px-20 border-b border-gray-800">
+        <button onClick={() => navigate("/")} className="border border-[#D4A373] px-4 py-2 text-[#D4A373] hover:bg-[#D4A373] hover:text-black transition rounded-lg text-sm">← HOME</button>
+        <h1 className="text-2xl font-bold tracking-wide"><span className="text-[#D4A373]">MENU</span></h1>
+        <div className="w-20"></div>
+      </div>
+      {/* Modal for item details */}
+      {selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4" onClick={() => setSelectedItem(null)}>
+          <div className="bg-[#111] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#D4A373]/30" onClick={(e) => e.stopPropagation()}>
+            <img src={selectedItem.img} alt={selectedItem.name} className="w-full h-64 object-cover rounded-t-2xl" />
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-[#D4A373]">{selectedItem.name}</h3>
+                  <p className="text-gray-400 text-sm mt-1">{selectedItem.origin}</p>
+                </div>
+                <span className="text-3xl font-bold text-[#D4A373]">{selectedItem.price}</span>
+              </div>
+              <p className="text-gray-300 leading-relaxed mb-4">{selectedItem.fullDesc}</p>
+              <p className="text-gray-400 text-sm mb-6">{selectedItem.desc}</p>
+              <button onClick={() => setSelectedItem(null)} className="w-full px-6 py-2 bg-[#D4A373] text-black rounded-lg font-semibold hover:bg-[#c49264] transition">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Hero Section with Fullscreen Video - Fixed alignment */}
+      <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
+        {/* Video Background - Fixed positioning */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline 
+            className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover"
+          >
+            <source src="/videos/menue.mp4" type="video/mp4" />
+          </video>
+        </div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/60"></div>
+        
+        {/* Content */}
+        <div className="relative z-10 px-4 max-w-4xl mx-auto" data-aos="fade-up">
+          <h1 className="text-4xl md:text-[100px] font-bold mb-4">
+            Our <span className="text-[#D4A373]">Menu</span>
+          </h1>
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+            Carefully curated teas and treats from around the world
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
+            <button 
+              onClick={() => document.getElementById('menu-content')?.scrollIntoView({ behavior: 'smooth' })}
+              className="px-6 py-3 border border-[#D4A373] text-[#D4A373] hover:bg-[#D4A373] hover:text-black transition flex items-center gap-2"
+            >
+              Explore Menu ↓
+            </button>
+            <button 
+              onClick={() => navigate("/")}
+              className="px-6 py-3 bg-[#D4A373] text-black hover:bg-[#c49264] transition font-semibold"
+            >
+              Back Home
+            </button>
+          </div>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce cursor-pointer z-10" onClick={() => document.getElementById('menu-content')?.scrollIntoView({ behavior: 'smooth' })}>
+          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+            <div className="w-1 h-2 bg-white rounded-full mt-2 animate-pulse"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Menu Content with Blurry Background Effect */}
+      <div 
+        id="menu-content"
+        className="relative"
+        style={{
+          background: `rgba(0, 0, 0, ${0.85 + scrollOpacity * 0.1})`,
+          backdropFilter: `blur(${scrollOpacity * 8}px)`,
+          transition: 'background 0.1s ease-out, backdrop-filter 0.1s ease-out'
+        }}
+      >
+        {/* Sticky Category Filter */}
+        <div className="sticky top-0 z-40 py-4 px-6 md:px-20" style={{ 
+          background: `rgba(0, 0, 0, ${0.9 + scrollOpacity * 0.05})`,
+          backdropFilter: `blur(${scrollOpacity * 12}px)`,
+          transition: 'background 0.1s ease-out, backdrop-filter 0.1s ease-out'
+        }}>
+          <div className="flex flex-wrap justify-center gap-3">
+            {categories.map(cat => (
+              <button 
+                key={cat} 
+                onClick={() => setActiveCategory(cat)} 
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeCategory === cat 
+                    ? "bg-[#D4A373] text-black shadow-lg shadow-[#D4A373]/20" 
+                    : "border border-gray-700 hover:border-[#D4A373] hover:text-[#D4A373] bg-black/50"
+                }`}
+              >
+                {cat.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Menu Items Grid */}
+        <div className="px-6 md:px-20 py-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((item, idx) => (
+              <div 
+                key={idx} 
+                onClick={() => setSelectedItem(item)} 
+                className="group bg-black/60 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-[#D4A373] transition-all duration-300 cursor-pointer hover:transform hover:-translate-y-2"
+                data-aos="fade-up" 
+                data-aos-delay={idx * 50}
+              >
+                <div className="relative h-56 overflow-hidden">
+                  <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                  <div className="absolute top-4 right-4">
+                    <span className="px-3 py-1 bg-[#D4A373]/90 text-black text-xs rounded-full font-semibold">
+                      {item.category.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold group-hover:text-[#D4A373] transition">{item.name}</h3>
+                    <span className="text-[#D4A373] font-bold text-lg">{item.price}</span>
+                  </div>
+                  <p className="text-gray-300 text-sm mb-2">{item.desc}</p>
+                  <p className="text-gray-500 text-xs flex items-center gap-1">
+                    <span className="inline-block w-1 h-1 rounded-full bg-[#D4A373]"></span>
+                    {item.origin}
+                  </p>
+                  <button className="mt-4 w-full py-2 border border-gray-600 rounded-lg text-sm hover:bg-[#D4A373] hover:text-black hover:border-[#D4A373] transition bg-black/40">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Empty State */}
+          {filtered.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-gray-400 text-lg">No items found in this category.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
